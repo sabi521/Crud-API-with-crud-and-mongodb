@@ -3,6 +3,9 @@ const app = express()
 const mongoose = require('mongoose');
 const port = 3000
 
+require('dotenv').config();
+
+
 const Product = require("./models/productModels");
 
 //json middleware to make our application understand json
@@ -52,7 +55,7 @@ app.get('/', (req, res) => {
     res.send(req.body); */
     try {
         const product = await Product.create(req.body);
-        res.status(200).json(products);
+        res.status(200).json(product);
     }
 
     catch(error) {
@@ -92,11 +95,11 @@ app.get('/', (req, res) => {
     }
   })
 
-mongoose.connect('mongodb+srv://admin:Brown20sagi@cluster0.jipdm.mongodb.net/Node-API?retryWrites=true&w=majority&appName=Cluster0')
+  mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Connected!');
     app.listen(port, () => {
-        console.log(`Example app listening on port ${port}`)
-      });
+        console.log(`Example app listening on port ${port}`);
+    });
   })
   .catch((error) => console.log(error));
