@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose');
 
+var cors = require('cors')
+
 const productRoute = require('./routes/productRoute');
 
 const errorMiddleware = require('./middleware/errorMiddleware');
@@ -10,6 +12,14 @@ require('dotenv').config();
 
 const MONGO_URL = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 3000;
+
+
+var corsOptions = {
+  origin: 'http://example.com', //write the url which you want to allow to access backend; to put multiple use array
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions ))
 
 //json middleware to make our application understand json
 app.use(express.json());
