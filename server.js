@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 const productRoute = require('./routes/productRoute');
 
+const errorMiddleware = require('./middleware/errorMiddleware');
+
 require('dotenv').config();
 
 const MONGO_URL = process.env.MONGODB_URI;
@@ -16,10 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 
 
+
+
 //middleware to use the productRoute in this file; used /api to append it before products in url
 app.use('/api/products', productRoute);
 
 app.get('/', (req, res) => {
+  //throw new Error('fake error');
   res.send('Hello World!!')
 })
 
@@ -30,6 +35,10 @@ app.get('/', (req, res) => {
 /* app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 }) */
+
+  //use middleware
+app.use(errorMiddleware);
+
 
   mongoose.connect(MONGO_URL)
   .then(() => {

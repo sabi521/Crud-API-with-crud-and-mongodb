@@ -1,30 +1,34 @@
 const Product = require('../models/productModels');
 
+const asyncHandler = require('express-async-handler')
+
 //get all products
-const getProducts = async(req, res) => {
+const getProducts = asyncHandler(async(req, res) => {
     try {
         const products = await Product.find({});
         res.status(200).json(products);
     }catch (error){
-        res.status(500).json({message : error.message});
+        res.status(500);
+        throw new Error(error.message);
     }
-  }
+  })
 
   //get single product
 
-  const getProduct = async(req, res) => {
+  const getProduct = asyncHandler(async(req, res) => {
     try {
         const {id} = req.params;
         const product = await Product.findById(id);
         res.status(200).json(product);
     }catch (error){
-        res.status(500).json({message : error.message});
+        res.status(500);
+        throw new Error(error.message);
     }
-  }
+  })
 
   //create a product
 
-  const createProduct =  async (req, res) => {
+  const createProduct =  asyncHandler(async (req, res) => {
     /* console.log(req.body);
     res.send(req.body); */
     try {
@@ -33,13 +37,13 @@ const getProducts = async(req, res) => {
     }
 
     catch(error) {
-        console.log(error.message);
-        res.status(500).json({message : error.message});
+        res.status(500);
+        throw new Error(error.message);
     }
-  }
+  })
 
   //update  a product
-  const updateProduct = async(req, res) => {
+  const updateProduct = asyncHandler(async(req, res) => {
     try {
         const {id} = req.params;
         const product = await Product.findByIdAndUpdate(id, req.body);
@@ -49,22 +53,25 @@ const getProducts = async(req, res) => {
         const updateProduct = await Product.findById(id);
         res.status(200).json(updateProduct);
     }catch (error){
-        res.status(500).json({message : error.message});
+        res.status(500);
+        throw new Error(error.message);
     }
-  }
+  })
 
   //delete a product
-  const deleteProduct = async(req, res) => {
+  const deleteProduct = asyncHandler(async(req, res) => {
     try {
         const {id} = req.params;
         const product = await Product.findByIdAndDelete(id);
         if(!product){
-            return res.status(404).json({message: `cannot find any product with ID ${id}`})
+            res.status(404);
+        throw new Error(`cannot find any product with ID ${id}`);
         }
         res.status(200).json(product);
     }catch (error){
-        res.status(500).json({message : error.message});
+        res.status(500);
+        throw new Error(error.message);
     }
-  }
+  })
 
   module.exports = {getProducts , getProduct, createProduct, updateProduct, deleteProduct}
